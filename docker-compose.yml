@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: autobee-api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: mongodb://mongodb:27017
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - autobee-net
+
+  mongodb:
+    image: mongo:7
+    container_name: autobee-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+    networks:
+      - autobee-net
+
+volumes:
+  mongo-data:
+    name: autobee-mongo-data
+
+networks:
+  autobee-net:
+    driver: bridge

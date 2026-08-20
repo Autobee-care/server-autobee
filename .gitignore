@@ -1,0 +1,26 @@
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+
+# Build artifacts
+bin/
+dist/
+coverage.out
+coverage.html
+
+# Swagger generated docs (regenerate with make swagger)
+docs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+vendor/
